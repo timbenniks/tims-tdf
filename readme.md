@@ -11,8 +11,8 @@ The project evolves every year and tries to use bleeding edge technology. I don'
 ## Features
 This year the project has the following features:
 
-* RESTful node API (ES2016, promises)
-* VueJS/Vuex front-end
+* RESTful node API (ES2015, promises)
+* VueJS/Vuex SPA front-end
 
 ## Data sources
 
