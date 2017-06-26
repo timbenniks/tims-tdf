@@ -32,3 +32,6 @@ With the above in place run:
 npm i
 npm start
 ```
+
+## Hosting
+* Stored on Heroku
