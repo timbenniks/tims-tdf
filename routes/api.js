@@ -30,13 +30,10 @@ router.get('/state', (req, res) => {
 })
 
 router.get('/trial', (req, res) => {
-  // get app state for stage id
-  getAppState().then((state) => {
-    // get actuall time trial data based on stage id
-    getTimeTrial(state)
-      .then(response => res.json(response))
-      .catch(error => res.json({ error }))
-  }).catch(error => res.json({ error }))
+  getAppState()
+    .then(getTimeTrial)
+    .then(response => res.json(response))
+    .catch(error => res.json({ error }))
 })
 
 module.exports = router
