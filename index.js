@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
 const api = require('./routes/api')
+const config = require('./config.json')
 
 const app = express()
 
@@ -13,13 +14,13 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use((req, res, next) => {
-  res.header('X-powered-by', 'Tim\'s TDF 2017 dashboard')
+  res.header('X-powered-by', config.title)
   res.header('Access-Control-Allow-Origin', '*')
   next()
 })
 
 app.get('/', (req, res) => {
-  res.json({ message: 'hello world' })
+  res.render('index', { config })
 })
 
 app.use('/api/', api)

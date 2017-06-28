@@ -1,0 +1,27 @@
+{
+  "baseurl": "https://tims-tdf-2017.herokuapp.com/",
+  "title": "Tim's TDF 2017 dashboard",
+  "description": "A live dashboard for the Tour De France 2017 by Tim Benniks",
+  "start": "2017-07-01 10:00:00",
+  "end": "2017-07-21 20:00:00",
+  "dayEndsAt": 18,
+  "serverTimeOffset": 2,
+  "race": 19,
+  "apibaseurl": "http://fep-api.dimensiondata.com/v2",
+  "guid": "%7BDFFD997B-DF77-4DD0-B4C4-32EDC49BFF44%7D",
+  "urls": {
+    "stages": "__apibaseurl__/race/__race__/stages",
+    "currentStage": "__apibaseurl__/race/__race__/stages/current",
+    "trial": "__apibaseurl__/trial/__stage__",
+    "riders": "__apibaseurl__/rider/v2/__race__",
+    "starters":"__apibaseurl__/stages/__stage__/starters",
+    "activityFeed": "__apibaseurl__/stages/v2/__stage__/activity-feed?siteGuid=__guid__&lang=en&$top=100",
+    "status": "__apibaseurl__/racecontent/v2/status/__guid__?lang=en",
+    "jerseys": "__apibaseurl__/stages/v2/__stage__/classification/jersey",
+    "classification": "__apibaseurl__/stages/__stage__/riderclassification",
+    "weather": "__apibaseurl__/stages/__stage__/weather?DistanceFromStart=__distancefromstart__",
+    "route": "__apibaseurl__/stages/v2/__stage__/route?reductionfactor=100",
+    "datacards": "__apibaseurl__/racecontent/v2/datacards/stage/__stage__?siteGuid=__guid__&lang=en",
+    "groups": "__apibaseurl__/stages/v2/__stage__/group-telemetry?datasource=aso"
+  }
+}
