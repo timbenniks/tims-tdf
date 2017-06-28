@@ -20,7 +20,5 @@ module.exports = (state) => new Promise((resolve, reject) => {
         NumberOfRidersRacing: response.NumberOfRidersRacing
       })
     })
-    .catch((error) => {
-      reject(error)
-    })
+    .catch(error => reject(error))
 })

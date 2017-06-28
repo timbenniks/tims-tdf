@@ -1,5 +1,6 @@
 const express = require('express')
 const getState = require('../models/state')
+const getStages = require('../models/stages')
 const getTimeTrial = require('../models/timeTrial')
 
 const router = express.Router()
@@ -26,6 +27,12 @@ router.get('/', (req, res) => {
 router.get('/state', (req, res) => {
   getAppState()
     .then(state => res.json(state))
+    .catch(error => res.json({ error }))
+})
+
+router.get('/stages', (req, res) => {
+  getStages()
+    .then(stages => res.json(stages))
     .catch(error => res.json({ error }))
 })
 
