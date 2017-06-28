@@ -5,6 +5,7 @@ const api = require('./routes/api')
 const config = require('./config.json')
 
 const app = express()
+const port = process.env.PORT || '5100'
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
@@ -24,7 +25,4 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/', api)
-
-const port = process.env.PORT || '5000'
-
 app.listen(port)
