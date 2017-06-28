@@ -2,7 +2,7 @@ const getUrl = require('../helpers/getUrl')
 const callApi = require('../helpers/callApi')
 
 module.exports = () => new Promise((resolve, reject) => {
-  const cleanStages = (stages) => stages.map((stage) => ({
+  const cleanStages = stages => stages.map(stage => ({
     stage: stage.StageId,
     stageDate: stage.StageDate,
     stageNumber: stage.StageNumber,
@@ -15,5 +15,5 @@ module.exports = () => new Promise((resolve, reject) => {
 
   callApi(getUrl('stages'))
     .then(response => resolve({ stages: cleanStages(response) }))
-    .catch(error => reject(error))
+    .catch(reject)
 })

@@ -3,7 +3,7 @@ const callApi = require('../helpers/callApi')
 
 module.exports = () => new Promise((resolve, reject) => {
   callApi(getUrl('currentStage'))
-    .then((response) => {
+    .then(response => {
       resolve({
         stage: response.StageId,
         stageDate: response.StageDate,
@@ -15,7 +15,5 @@ module.exports = () => new Promise((resolve, reject) => {
         distanceFromStart: response.TotalDistanceFromRaceStart
       })
     })
-    .catch((error) => {
-      reject(error)
-    })
+    .catch(reject)
 })
