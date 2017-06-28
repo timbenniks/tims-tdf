@@ -1,8 +1,8 @@
 const getUrl = require('../helpers/getUrl')
 const callApi = require('../helpers/callApi')
 
-module.exports = (state) => new Promise((resolve, reject) => {
-  const cleanCheckPoints = (checkPoints) => checkPoints.map((point) => ({
+module.exports = state => new Promise((resolve, reject) => {
+  const cleanCheckPoints = checkPoints => checkPoints.map(point => ({
     ridersPassed: point.NumberOfRidersPassed,
     distFromStart: point.DistanceFromStart,
     distToFinish: point.DistanceToFinish,
@@ -11,14 +11,14 @@ module.exports = (state) => new Promise((resolve, reject) => {
   }))
 
   callApi(getUrl('trial', state.stage))
-    .then((response) => {
+    .then(response => {
       resolve({
-        CheckPoints: cleanCheckPoints(response.CheckPoints),
-        RidersStillToStart: response.RidersStillToStart,
-        RidersStarted: response.RidersStarted,
-        RidersCompleted: response.RidersCompleted,
-        NumberOfRidersRacing: response.NumberOfRidersRacing
+        checkPoints: cleanCheckPoints(response.CheckPoints),
+        ridersStillToStart: response.RidersStillToStart,
+        ridersStarted: response.RidersStarted,
+        ridersCompleted: response.RidersCompleted,
+        numberOfRidersRacing: response.NumberOfRidersRacing
       })
     })
-    .catch(error => reject(error))
+    .catch(reject)
 })
