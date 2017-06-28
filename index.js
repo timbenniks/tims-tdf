@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 })
 
 app.get('/', (req, res) => {
-  res.json({ message: 'hello world' })
+  res.render('index', { title: 'Tim\'s TDF 2017 dashboard', message: 'Hello there!' })
 })
 
 app.use('/api/', api)
