@@ -3,6 +3,7 @@ const getState = require('../models/state')
 const getStages = require('../models/stages')
 const getTrial = require('../models/trial')
 const getRiders = require('../models/riders')
+const getStatus = require('../models/status')
 
 const router = express.Router()
 let appState = false
@@ -23,6 +24,12 @@ const getAppState = () => new Promise((resolve, reject) => {
 
 router.get('/', (req, res) => {
   res.json({ error: 'Nothing here... move along' })
+})
+
+router.get('/status', (req, res) => {
+  getStatus()
+    .then(response => res.json(response))
+    .catch(error => res.json({ error }))
 })
 
 router.get('/state', (req, res) => {
