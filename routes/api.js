@@ -4,6 +4,7 @@ const getStages = require('../models/stages')
 const getTrial = require('../models/trial')
 const getRiders = require('../models/riders')
 const getStatus = require('../models/status')
+const getStarters = require('../models/starters')
 
 const router = express.Router()
 let appState = false
@@ -43,6 +44,14 @@ router.get('/stages', (req, res) => {
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
+
+router.get('/starters', (req, res) => {
+  getAppState()
+    .then(getStarters)
+    .then(response => res.json(response))
+    .catch(error => res.json({ error }))
+})
+
 
 router.get('/trial', (req, res) => {
   getAppState()
