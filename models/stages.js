@@ -14,6 +14,6 @@ module.exports = () => new Promise((resolve, reject) => {
   }))
 
   callApi(getUrl('stages'))
-    .then(response => resolve({ stages: cleanStages(response) }))
+    .then(response => resolve(cleanStages(response)))
     .catch(reject)
 })
