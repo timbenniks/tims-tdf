@@ -3,14 +3,14 @@ const callApi = require('../helpers/callApi')
 
 module.exports = () => new Promise((resolve, reject) => {
   const cleanRiders = riders => riders.map(rider => ({
-    shortName: rider.ShortName,
     id: rider.Id,
     first: rider.FirstName,
     last: rider.LastName,
+    shortName: rider.ShortName,
     team: rider.TeamName,
     teamCode: rider.TeamCode,
-    Nationality: rider.Nationality,
-    country: rider.CountryCode,
+    country: rider.Nationality,
+    countryCode: rider.CountryCode,
     birthDate: rider.DateOfBirth,
     photo: rider.PhotoUri,
     withdrawn: rider.IsWithdrawn,
