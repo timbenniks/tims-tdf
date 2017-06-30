@@ -1,7 +1,7 @@
 const express = require('express')
 const getState = require('../models/state')
 const getStages = require('../models/stages')
-const getTimeTrial = require('../models/timeTrial')
+const getTrial = require('../models/trial')
 const getRiders = require('../models/riders')
 
 const router = express.Router()
@@ -39,8 +39,15 @@ router.get('/stages', (req, res) => {
 
 router.get('/trial', (req, res) => {
   getAppState()
-    .then(getTimeTrial)
-    .then(response => res.json(response))
+    .then((state) => {
+      getRiders()
+        .then((riders) => {
+          getTrial(state, riders)
+            .then(response => res.json(response))
+            .catch(error => res.json({ error }))
+        })
+        .catch(error => res.json({ error }))
+    })
     .catch(error => res.json({ error }))
 })
 
