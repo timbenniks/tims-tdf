@@ -19,10 +19,12 @@
     "weather": "__apibaseurl__/stages/__stage__/weather?DistanceFromStart=__distancefromstart__",
     "feed": "__apibaseurl__/stages/v2/__stage__/activity-feed?siteGuid=__guid__&lang=en&$top=100",
     "route": "__apibaseurl__/stages/v2/__stage__/route?reductionfactor=100",
+    "withdrawals": "__apibaseurl__/stages/__stage__/withdrawals",
 
     "jerseys": "__apibaseurl__/stages/v2/__stage__/classification/jersey",
     "classification": "__apibaseurl__/stages/__stage__/riderclassification",
     "datacards": "__apibaseurl__/racecontent/v2/datacards/stage/__stage__?siteGuid=__guid__&lang=en",
-    "groups": "__apibaseurl__/stages/v2/__stage__/group-telemetry?datasource=aso"
+    "groupTelemetry": "__apibaseurl__/stages/v2/__stage__/group-telemetry?datasource=aso",
+    "riderTelemetry": "__apibaseurl__/stages/v2/__stage__/rider-telemetry"
   }
 }
