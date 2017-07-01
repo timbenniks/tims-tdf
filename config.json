@@ -22,9 +22,8 @@
     "withdrawals": "__apibaseurl__/stages/__stage__/withdrawals",
     "classification": "__apibaseurl__/stages/__stage__/riderclassification",
     "jerseys": "__apibaseurl__/stages/v2/__stage__/classification/jersey",
-
-    "datacards": "__apibaseurl__/racecontent/v2/datacards/stage/__stage__?siteGuid=__guid__&lang=en",
     "groupTelemetry": "__apibaseurl__/stages/v2/__stage__/group-telemetry?datasource=aso",
-    "riderTelemetry": "__apibaseurl__/stages/v2/__stage__/rider-telemetry"
+    "riderTelemetry": "__apibaseurl__/stages/__stage__/rider-telemetry",
+    "datacards": "__apibaseurl__/racecontent/v2/datacards/stage/__stage__?siteGuid=__guid__&lang=en"
   }
 }

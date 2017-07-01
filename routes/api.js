@@ -11,6 +11,8 @@ const getRoute = require('../models/route')
 const getWithdrawals = require('../models/withdrawals')
 const getClassification = require('../models/classification')
 const getJerseys = require('../models/jerseys')
+const getGroupTelemetry = require('../models/group-telemetry')
+const getRiderTelemetry = require('../models/rider-telemetry')
 
 const router = express.Router()
 let appState = false
@@ -121,5 +123,25 @@ router.get('/jerseys', (req, res) => {
     .catch(error => res.json({ error }))
 })
 
+router.get('/group-telemetry', (req, res) => {
+  getAppState()
+    .then(getGroupTelemetry)
+    .then(response => res.json(response))
+    .catch(error => res.json({ error }))
+})
+
+router.get('/rider-telemetry', (req, res) => {
+  getAppState()
+    .then((state) => {
+      getRiders()
+        .then((riders) => {
+          getRiderTelemetry(state, riders)
+            .then(response => res.json(response))
+            .catch(error => res.json({ error }))
+        })
+        .catch(error => res.json({ error }))
+    })
+    .catch(error => res.json({ error }))
+})
 
 module.exports = router
