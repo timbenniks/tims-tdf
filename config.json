@@ -17,7 +17,7 @@
     "status": "__apibaseurl__/racecontent/v2/status/__guid__?lang=en",
     "trial": "__apibaseurl__/trial/__stage__",
     "weather": "__apibaseurl__/stages/__stage__/weather?DistanceFromStart=__distancefromstart__",
-    "activityFeed": "__apibaseurl__/stages/v2/__stage__/activity-feed?siteGuid=__guid__&lang=en&$top=100",
+    "feed": "__apibaseurl__/stages/v2/__stage__/activity-feed?siteGuid=__guid__&lang=en&$top=100",
 
     "jerseys": "__apibaseurl__/stages/v2/__stage__/classification/jersey",
     "classification": "__apibaseurl__/stages/__stage__/riderclassification",

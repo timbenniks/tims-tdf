@@ -7,6 +7,7 @@ module.exports = () => new Promise((resolve, reject) => {
       resolve({
         stage: response.StageId,
         stageDate: response.StageDate,
+        startTime: response.StageStartTime,
         stageNumber: response.StageNumber,
         stageType: response.StageType,
         start: response.DepartingTown,
