@@ -8,6 +8,7 @@ const getStarters = require('../models/starters')
 const getWeather = require('../models/weather')
 const getFeed = require('../models/feed')
 const getRoute = require('../models/route')
+const getWithdrawals = require('../models/withdrawals')
 
 const router = express.Router()
 let appState = false
@@ -93,6 +94,13 @@ router.get('/riders', (req, res) => {
 router.get('/route', (req, res) => {
   getAppState()
     .then(getRoute)
+    .then(response => res.json(response))
+    .catch(error => res.json({ error }))
+})
+
+router.get('/withdrawals', (req, res) => {
+  getAppState()
+    .then(getWithdrawals)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
