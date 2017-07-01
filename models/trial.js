@@ -12,15 +12,15 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
   }))
 
   const cleanRiderInfo = riders => riders.map(rider => ({
-    startsTime: rider.ScheduledStartTime,
-    time: rider.LocalTime,
-    rider: peloton.find(r => r.id === rider.RiderBibNumber),
+    scheduledStartTime: rider.ScheduledStartTime,
+    actualStartTime: rider.ActualStartTime,
+    localTime: rider.LocalTime,
     timeFromStart: rider.TimeFromStart,
     gapFromBestRider: rider.GapFromBestRider,
-    startTime: rider.ActualStartTime,
     position: rider.Position,
     checkpointId: rider.CheckPointId,
-    status: rider.ClassificationStatus
+    status: rider.ClassificationStatus,
+    rider: peloton.find(r => r.id === rider.RiderBibNumber)
   }))
 
   callApi(getUrl('trial', state.stage))
