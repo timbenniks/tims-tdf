@@ -18,10 +18,10 @@
     "trial": "__apibaseurl__/trial/__stage__",
     "weather": "__apibaseurl__/stages/__stage__/weather?DistanceFromStart=__distancefromstart__",
     "feed": "__apibaseurl__/stages/v2/__stage__/activity-feed?siteGuid=__guid__&lang=en&$top=100",
+    "route": "__apibaseurl__/stages/v2/__stage__/route?reductionfactor=100",
 
     "jerseys": "__apibaseurl__/stages/v2/__stage__/classification/jersey",
     "classification": "__apibaseurl__/stages/__stage__/riderclassification",
-    "route": "__apibaseurl__/stages/v2/__stage__/route?reductionfactor=100",
     "datacards": "__apibaseurl__/racecontent/v2/datacards/stage/__stage__?siteGuid=__guid__&lang=en",
     "groups": "__apibaseurl__/stages/v2/__stage__/group-telemetry?datasource=aso"
   }
