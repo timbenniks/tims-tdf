@@ -144,4 +144,40 @@ router.get('/rider-telemetry', (req, res) => {
     .catch(error => res.json({ error }))
 })
 
+router.get('/all', (req, res) => {
+  const promises = []
+
+  getAppState().then((state) => {
+    promises.push(getStatus())
+    promises.push(getFeed(state))
+    promises.push(getWeather(state))
+    promises.push(getRiders(state))
+    promises.push(getRoute(state))
+    promises.push(getWithdrawals(state))
+    promises.push(getClassification(state))
+    promises.push(getJerseys(state))
+    promises.push(getGroupTelemetry(state))
+
+    let response = {}
+    Promise.all(promises)
+      .then((data) => {
+        response = {
+          status: data[0],
+          feed: data[1],
+          weather: data[2],
+          riders: data[3],
+          route: data[4],
+          withdrawals: data[5],
+          classification: data[6],
+          jerseys: data[7],
+          groupTelemetry: data[8]
+        }
+
+        res.json(response)
+      })
+      .catch(error => res.json({ error }))
+  })
+})
+
+
 module.exports = router
