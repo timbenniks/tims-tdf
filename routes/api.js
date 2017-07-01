@@ -7,6 +7,7 @@ const getStatus = require('../models/status')
 const getStarters = require('../models/starters')
 const getWeather = require('../models/weather')
 const getFeed = require('../models/feed')
+const getRoute = require('../models/route')
 
 const router = express.Router()
 let appState = false
@@ -68,7 +69,6 @@ router.get('/starters', (req, res) => {
     .catch(error => res.json({ error }))
 })
 
-
 router.get('/trial', (req, res) => {
   getAppState()
     .then((state) => {
@@ -86,6 +86,13 @@ router.get('/trial', (req, res) => {
 router.get('/riders', (req, res) => {
   getAppState()
     .then(getRiders)
+    .then(response => res.json(response))
+    .catch(error => res.json({ error }))
+})
+
+router.get('/route', (req, res) => {
+  getAppState()
+    .then(getRoute)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
