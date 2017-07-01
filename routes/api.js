@@ -32,7 +32,27 @@ const getAppState = () => new Promise((resolve, reject) => {
 })
 
 router.get('/', (req, res) => {
-  res.json({ error: 'Nothing here... move along' })
+  res.json({
+    message: 'Welcome to Tims TDF2017 API. You can use the following urls',
+    urls: [
+      '/api/',
+      '/api/status',
+      '/api/state',
+      '/api/feed',
+      '/api/weather',
+      '/api/stages',
+      '/api/starters',
+      '/api/trial',
+      '/api/riders',
+      '/api/route',
+      '/api/withdrawals',
+      '/api/classification',
+      '/api/jerseys',
+      '/api/group-telemetry',
+      '/api/rider-telemetry',
+      '/api/all',
+    ]
+  })
 })
 
 router.get('/status', (req, res) => {
