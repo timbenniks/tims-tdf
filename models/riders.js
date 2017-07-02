@@ -13,6 +13,8 @@ module.exports = () => new Promise((resolve, reject) => {
     countryCode: rider.CountryCode,
     birthDate: rider.DateOfBirth,
     photo: rider.PhotoUri,
+    generalClassificationShort: rider.GeneralClassification,
+    sprntClassificationShort: rider.SprintClassification,
     withdrawn: rider.IsWithdrawn,
     rank: [{
       yellow: rider.GeneralClassificationRank,
