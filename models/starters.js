@@ -24,7 +24,12 @@ module.exports = (state) => new Promise((resolve, reject) => {
     riders: cleanRiders(team.Riders)
   }))
 
-  callApi(getUrl('starters', state.stage))
-    .then(response => resolve(cleanStarters(response)))
-    .catch(reject)
+  const url = getUrl('starters', state.stage)
+
+  callApi(url)
+    .then(response => resolve({
+      originalUrl: url,
+      starters: cleanStarters(response)
+    }))
+    .catch(error => reject({ error, originalUrl: url }))
 })

@@ -11,11 +11,14 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
     rider: peloton.find(r => r.id === rider.Bib)
   }))
 
-  callApi(getUrl('classificationOverall', state.stage))
+  const url = getUrl('classificationOverall', state.stage)
+
+  callApi(url)
     .then(response => resolve({
+      originalUrl: url,
       yellow: cleanClassification(response.General),
       white: cleanClassification(response.Sprint),
       youth: cleanClassification(response.Youth)
     }))
-    .catch(reject)
+    .catch(error => reject({ error, originalUrl: url }))
 })

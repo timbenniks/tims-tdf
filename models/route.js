@@ -40,12 +40,15 @@ module.exports = (state) => new Promise((resolve, reject) => {
     altitude: point.Altitude
   }))
 
-  callApi(getUrl('route', state.stage))
+  const url = getUrl('route', state.stage)
+
+  callApi(url)
     .then(response => {
       resolve({
+        originalUrl: url,
         pointsOfInterest: cleanPointsOfInterest(response.PointsOfInterest),
         points: cleanPoints(response.profilePoints)
       })
     })
-    .catch(reject)
+    .catch(error => reject({ error, originalUrl: url }))
 })

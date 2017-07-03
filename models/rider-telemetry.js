@@ -25,9 +25,12 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
     riderInfo: peloton.find(r => r.id === rider.Bib)
   }))
 
-  callApi(getUrl('riderTelemetry', state.stage))
+  const url = getUrl('riderTelemetry', state.stage)
+
+  callApi(url)
     .then(response => {
       resolve({
+        originalUrl: url,
         epoch: response.TimeStampEpoch,
         periodStart: response.TimeStampStart,
         periodEnd: response.TimeStampEnd,
@@ -38,5 +41,5 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
         riders: cleanRiders(response.Riders)
       })
     })
-    .catch(reject)
+    .catch(error => reject({ error, originalUrl: url }))
 })
