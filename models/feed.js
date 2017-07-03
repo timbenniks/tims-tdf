@@ -15,12 +15,15 @@ module.exports = (state) => new Promise((resolve, reject) => {
     stageId: item.StageId
   }))
 
-  callApi(getUrl('feed', state.stage))
+  const url = getUrl('feed', state.stage)
+
+  callApi(url)
     .then(response => {
       resolve({
+        originalUrl: url,
         items: cleanItems(response.Items),
         count: response.Count
       })
     })
-    .catch(reject)
+    .catch(error => reject({ error, originalUrl: url }))
 })

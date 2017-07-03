@@ -16,7 +16,12 @@ module.exports = state => new Promise((resolve, reject) => {
     withdrawn: rider.IsWithdrawn
   }))
 
-  callApi(getUrl('withdrawals', state.stage))
-    .then(response => resolve(cleanRiders(response[0].Value)))
-    .catch(reject)
+  const url = getUrl('withdrawals', state.stage)
+
+  callApi(url)
+    .then(response => resolve({
+      originalUrl: url,
+      withdrawals: cleanRiders(response[0].Value)
+    }))
+    .catch(error => reject({ error, originalUrl: url }))
 })

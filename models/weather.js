@@ -1,10 +1,8 @@
 const getUrl = require('../helpers/getUrl')
 const callApi = require('../helpers/callApi')
 
-module.exports = (state) => new Promise((resolve, reject) => {
-  const weatherUrl = getUrl('weather', state.stage).replace('__distancefromstart__', state.distanceFromStart)
-
-  const clean = weather => ({
+module.exports = state => new Promise((resolve, reject) => {
+  const cleanWeather = weather => ({
     distFormStart: weather.DistanceFromStart,
     type: weather.WeatherType,
     temp: weather.Temperature,
@@ -14,7 +12,12 @@ module.exports = (state) => new Promise((resolve, reject) => {
     time: weather.WeatherDate
   })
 
-  callApi(weatherUrl)
-    .then(response => resolve(clean(response)))
-    .catch(reject)
+  const url = getUrl('weather', state.stage).replace('__distancefromstart__', state.distanceFromStart)
+
+  callApi(url)
+    .then(response => resolve({
+      originalUrl: url,
+      weather: cleanWeather(response)
+    }))
+    .catch(error => reject({ error, originalUrl: url }))
 })

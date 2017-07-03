@@ -50,25 +50,32 @@ const getLocalRiders = () => new Promise((resolve, reject) => {
 
 // API calls
 router.get('/', (req, res) => {
+  let baseurl = 'http://localhost:5100'
+
+  if (req.env === 'production') {
+    baseurl = 'http://tims-tdf-2017.herokuapp.com'
+  }
+
   res.json({
     message: 'Welcome to Tims TDF2017 API. You can use the following urls',
+    env: req.env,
     urls: [
-      '/api/',
-      '/api/status',
-      '/api/state',
-      '/api/feed',
-      '/api/weather',
-      '/api/stages',
-      '/api/starters',
-      '/api/trial',
-      '/api/riders',
-      '/api/route',
-      '/api/withdrawals',
-      '/api/classification-overall',
-      '/api/jerseys',
-      '/api/group-telemetry',
-      '/api/rider-telemetry',
-      '/api/all',
+      `${baseurl}/api/`,
+      `${baseurl}/api/status`,
+      `${baseurl}/api/state`,
+      `${baseurl}/api/feed`,
+      `${baseurl}/api/weather`,
+      `${baseurl}/api/stages`,
+      `${baseurl}/api/starters`,
+      `${baseurl}/api/trial`,
+      `${baseurl}/api/riders`,
+      `${baseurl}/api/route`,
+      `${baseurl}/api/withdrawals`,
+      `${baseurl}/api/classification-overall`,
+      `${baseurl}/api/jerseys`,
+      `${baseurl}/api/group-telemetry`,
+      `${baseurl}/api/rider-telemetry`,
+      `${baseurl}/api/all`,
     ]
   })
 })
@@ -80,7 +87,7 @@ router.get('/status', (req, res) => {
 })
 
 router.get('/state', (req, res) => {
-  getLocalState()
+  getState()
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
