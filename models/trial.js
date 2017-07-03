@@ -20,18 +20,27 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
     position: rider.Position,
     checkpointId: rider.CheckPointId,
     status: rider.ClassificationStatus,
-    rider: peloton.find(r => r.id === rider.RiderBibNumber)
+    rider: peloton.data.find(r => r.id === rider.RiderBibNumber)
   }))
 
-  callApi(getUrl('trial', state.stage))
+  const url = getUrl('trial', state.data.stage)
+  const meta = {
+    originalUrl: url,
+    type: 'trial'
+  }
+
+  callApi(url)
     .then(response => {
       resolve({
-        checkPoints: cleanCheckPoints(response.CheckPoints),
-        ridersToStart: cleanRiderInfo(response.RidersStillToStart),
-        ridersStarted: cleanRiderInfo(response.RidersStarted),
-        ridersCompleted: cleanRiderInfo(response.RidersCompleted),
-        numberOfRidersRacing: response.NumberOfRidersRacing
+        meta,
+        data: {
+          checkPoints: cleanCheckPoints(response.CheckPoints),
+          ridersToStart: cleanRiderInfo(response.RidersStillToStart),
+          ridersStarted: cleanRiderInfo(response.RidersStarted),
+          ridersCompleted: cleanRiderInfo(response.RidersCompleted),
+          numberOfRidersRacing: response.NumberOfRidersRacing
+        }
       })
     })
-    .catch(reject)
+    .catch(error => reject({ error, meta }))
 })

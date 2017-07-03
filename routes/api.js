@@ -1,4 +1,5 @@
 const express = require('express')
+const combined = require('./combined')
 const getState = require('../models/state')
 const getStages = require('../models/stages')
 const getTrial = require('../models/trial')
@@ -16,59 +17,34 @@ const getRiderTelemetry = require('../models/rider-telemetry')
 
 const router = express.Router()
 
-// local cache for state and riders.
-let appState = false
-let peloton = false
-
-const getLocalState = () => new Promise((resolve, reject) => {
-  if (!appState) {
-    getState()
-      .then((state) => {
-        appState = state
-        resolve(appState)
-      })
-      .catch(reject)
-  }
-  else {
-    resolve(appState)
-  }
-})
-
-const getLocalRiders = () => new Promise((resolve, reject) => {
-  if (!peloton) {
-    getRiders()
-      .then((riders) => {
-        peloton = riders
-        resolve(peloton)
-      })
-      .catch(reject)
-  }
-  else {
-    resolve(peloton)
-  }
-})
-
 // API calls
 router.get('/', (req, res) => {
+  let baseurl = 'http://localhost:5100'
+
+  if (req.env === 'production') {
+    baseurl = 'http://tims-tdf-2017.herokuapp.com'
+  }
+
   res.json({
     message: 'Welcome to Tims TDF2017 API. You can use the following urls',
+    env: req.env,
     urls: [
-      '/api/',
-      '/api/status',
-      '/api/state',
-      '/api/feed',
-      '/api/weather',
-      '/api/stages',
-      '/api/starters',
-      '/api/trial',
-      '/api/riders',
-      '/api/route',
-      '/api/withdrawals',
-      '/api/classification-overall',
-      '/api/jerseys',
-      '/api/group-telemetry',
-      '/api/rider-telemetry',
-      '/api/all',
+      `${baseurl}/api/`,
+      `${baseurl}/api/status`,
+      `${baseurl}/api/state`,
+      `${baseurl}/api/feed`,
+      `${baseurl}/api/weather`,
+      `${baseurl}/api/stages`,
+      `${baseurl}/api/starters`,
+      `${baseurl}/api/trial`,
+      `${baseurl}/api/riders`,
+      `${baseurl}/api/route`,
+      `${baseurl}/api/withdrawals`,
+      `${baseurl}/api/classification-overall`,
+      `${baseurl}/api/jerseys`,
+      `${baseurl}/api/group-telemetry`,
+      `${baseurl}/api/rider-telemetry`,
+      `${baseurl}/api/combined`,
     ]
   })
 })
@@ -80,13 +56,13 @@ router.get('/status', (req, res) => {
 })
 
 router.get('/state', (req, res) => {
-  getLocalState()
+  getState()
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/feed', (req, res) => {
-  getLocalState()
+  getState()
     .then(getFeed)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
@@ -106,16 +82,16 @@ router.get('/stages', (req, res) => {
 })
 
 router.get('/starters', (req, res) => {
-  getLocalState()
+  getState()
     .then(getStarters)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/trial', (req, res) => {
-  getLocalState()
+  getState()
     .then((state) => {
-      getLocalRiders()
+      getRiders()
         .then((riders) => {
           getTrial(state, riders)
             .then(response => res.json(response))
@@ -127,30 +103,30 @@ router.get('/trial', (req, res) => {
 })
 
 router.get('/riders', (req, res) => {
-  getLocalState()
-    .then(getLocalRiders)
+  getState()
+    .then(getRiders)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/route', (req, res) => {
-  getLocalState()
+  getState()
     .then(getRoute)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/withdrawals', (req, res) => {
-  getLocalState()
+  getState()
     .then(getWithdrawals)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/classification-overall', (req, res) => {
-  getLocalState()
+  getState()
     .then((state) => {
-      getLocalRiders()
+      getRiders()
         .then((riders) => {
           getClassificationOverall(state, riders)
             .then(response => res.json(response))
@@ -162,9 +138,9 @@ router.get('/classification-overall', (req, res) => {
 })
 
 router.get('/jerseys', (req, res) => {
-  getLocalState()
+  getState()
     .then((state) => {
-      getLocalRiders()
+      getRiders()
         .then((riders) => {
           getJerseys(state, riders)
             .then(response => res.json(response))
@@ -176,16 +152,25 @@ router.get('/jerseys', (req, res) => {
 })
 
 router.get('/group-telemetry', (req, res) => {
-  getLocalState()
-    .then(getGroupTelemetry)
-    .then(response => res.json(response))
+  getState()
+    .then((state) => {
+      getRiders()
+        .then((riders) => {
+          console.log(state, riders)
+
+          getGroupTelemetry(state, riders)
+            .then(response => res.json(response))
+            .catch(error => res.json({ error }))
+        })
+        .catch(error => res.json({ error }))
+    })
     .catch(error => res.json({ error }))
 })
 
 router.get('/rider-telemetry', (req, res) => {
-  getLocalState()
+  getState()
     .then((state) => {
-      getLocalRiders()
+      getRiders()
         .then((riders) => {
           getRiderTelemetry(state, riders)
             .then(response => res.json(response))
@@ -196,40 +181,6 @@ router.get('/rider-telemetry', (req, res) => {
     .catch(error => res.json({ error }))
 })
 
-router.get('/all', (req, res) => {
-  const promises = []
-
-  getLocalState().then((state) => {
-    promises.push(getStatus())
-    promises.push(getFeed(state))
-    promises.push(getWeather(state))
-    promises.push(getLocalRiders(state))
-    promises.push(getRoute(state))
-    promises.push(getWithdrawals(state))
-    promises.push(getClassificationOverall(state))
-    promises.push(getJerseys(state))
-    promises.push(getGroupTelemetry(state))
-
-    let response = {}
-    Promise.all(promises)
-      .then((data) => {
-        response = {
-          status: data[0],
-          feed: data[1],
-          weather: data[2],
-          riders: data[3],
-          route: data[4],
-          withdrawals: data[5],
-          classification: data[6],
-          jerseys: data[7],
-          groupTelemetry: data[8]
-        }
-
-        res.json(response)
-      })
-      .catch(error => res.json({ error }))
-  })
-})
-
+router.use('/combined/', combined)
 
 module.exports = router
