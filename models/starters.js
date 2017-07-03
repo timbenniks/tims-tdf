@@ -1,7 +1,7 @@
 const getUrl = require('../helpers/getUrl')
 const callApi = require('../helpers/callApi')
 
-module.exports = (state) => new Promise((resolve, reject) => {
+module.exports = state => new Promise((resolve, reject) => {
   const cleanRiders = riders => riders.map(rider => ({
     id: rider.RiderBibNumber,
     first: rider.FirstName,
@@ -24,12 +24,16 @@ module.exports = (state) => new Promise((resolve, reject) => {
     riders: cleanRiders(team.Riders)
   }))
 
-  const url = getUrl('starters', state.stage)
+  const url = getUrl('starters', state.data.stage)
+  const meta = {
+    originalUrl: url,
+    type: 'starters'
+  }
 
   callApi(url)
     .then(response => resolve({
-      originalUrl: url,
-      starters: cleanStarters(response)
+      meta,
+      data: cleanStarters(response)
     }))
-    .catch(error => reject({ error, originalUrl: url }))
+    .catch(error => reject({ error, meta }))
 })

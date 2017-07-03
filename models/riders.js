@@ -26,11 +26,15 @@ module.exports = () => new Promise((resolve, reject) => {
   }))
 
   const url = getUrl('riders')
+  const meta = {
+    originalUrl: url,
+    type: 'riders'
+  }
 
   callApi(url)
     .then(response => resolve({
-      originalUrl: url,
-      riders: cleanRiders(response)
+      meta,
+      data: cleanRiders(response)
     }))
-    .catch(error => reject({ error, originalUrl: url }))
+    .catch(error => reject({ error, meta }))
 })
