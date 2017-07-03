@@ -9,15 +9,18 @@ const getWeather = require('../models/weather')
 const getFeed = require('../models/feed')
 const getRoute = require('../models/route')
 const getWithdrawals = require('../models/withdrawals')
-const getClassification = require('../models/classification')
+const getClassificationOverall = require('../models/classification-overall')
 const getJerseys = require('../models/jerseys')
 const getGroupTelemetry = require('../models/group-telemetry')
 const getRiderTelemetry = require('../models/rider-telemetry')
 
 const router = express.Router()
-let appState = false
 
-const getAppState = () => new Promise((resolve, reject) => {
+// local cache for state and riders.
+let appState = false
+let peloton = false
+
+const getLocalState = () => new Promise((resolve, reject) => {
   if (!appState) {
     getState()
       .then((state) => {
@@ -31,6 +34,21 @@ const getAppState = () => new Promise((resolve, reject) => {
   }
 })
 
+const getLocalRiders = () => new Promise((resolve, reject) => {
+  if (!peloton) {
+    getRiders()
+      .then((riders) => {
+        peloton = riders
+        resolve(peloton)
+      })
+      .catch(reject)
+  }
+  else {
+    resolve(peloton)
+  }
+})
+
+// API calls
 router.get('/', (req, res) => {
   res.json({
     message: 'Welcome to Tims TDF2017 API. You can use the following urls',
@@ -46,7 +64,7 @@ router.get('/', (req, res) => {
       '/api/riders',
       '/api/route',
       '/api/withdrawals',
-      '/api/classification',
+      '/api/classification-overall',
       '/api/jerseys',
       '/api/group-telemetry',
       '/api/rider-telemetry',
@@ -62,13 +80,13 @@ router.get('/status', (req, res) => {
 })
 
 router.get('/state', (req, res) => {
-  getAppState()
+  getLocalState()
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/feed', (req, res) => {
-  getAppState()
+  getLocalState()
     .then(getFeed)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
@@ -88,16 +106,16 @@ router.get('/stages', (req, res) => {
 })
 
 router.get('/starters', (req, res) => {
-  getAppState()
+  getLocalState()
     .then(getStarters)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/trial', (req, res) => {
-  getAppState()
+  getLocalState()
     .then((state) => {
-      getRiders()
+      getLocalRiders()
         .then((riders) => {
           getTrial(state, riders)
             .then(response => res.json(response))
@@ -109,51 +127,65 @@ router.get('/trial', (req, res) => {
 })
 
 router.get('/riders', (req, res) => {
-  getAppState()
-    .then(getRiders)
+  getLocalState()
+    .then(getLocalRiders)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/route', (req, res) => {
-  getAppState()
+  getLocalState()
     .then(getRoute)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/withdrawals', (req, res) => {
-  getAppState()
+  getLocalState()
     .then(getWithdrawals)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
-router.get('/classification', (req, res) => {
-  getAppState()
-    .then(getClassification)
-    .then(response => res.json(response))
+router.get('/classification-overall', (req, res) => {
+  getLocalState()
+    .then((state) => {
+      getLocalRiders()
+        .then((riders) => {
+          getClassificationOverall(state, riders)
+            .then(response => res.json(response))
+            .catch(error => res.json({ error }))
+        })
+        .catch(error => res.json({ error }))
+    })
     .catch(error => res.json({ error }))
 })
 
 router.get('/jerseys', (req, res) => {
-  getAppState()
-    .then(getJerseys)
-    .then(response => res.json(response))
+  getLocalState()
+    .then((state) => {
+      getLocalRiders()
+        .then((riders) => {
+          getJerseys(state, riders)
+            .then(response => res.json(response))
+            .catch(error => res.json({ error }))
+        })
+        .catch(error => res.json({ error }))
+    })
     .catch(error => res.json({ error }))
 })
 
 router.get('/group-telemetry', (req, res) => {
-  getAppState()
+  getLocalState()
     .then(getGroupTelemetry)
     .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/rider-telemetry', (req, res) => {
-  getAppState()
+  getLocalState()
     .then((state) => {
-      getRiders()
+      getLocalRiders()
         .then((riders) => {
           getRiderTelemetry(state, riders)
             .then(response => res.json(response))
@@ -167,14 +199,14 @@ router.get('/rider-telemetry', (req, res) => {
 router.get('/all', (req, res) => {
   const promises = []
 
-  getAppState().then((state) => {
+  getLocalState().then((state) => {
     promises.push(getStatus())
     promises.push(getFeed(state))
     promises.push(getWeather(state))
-    promises.push(getRiders(state))
+    promises.push(getLocalRiders(state))
     promises.push(getRoute(state))
     promises.push(getWithdrawals(state))
-    promises.push(getClassification(state))
+    promises.push(getClassificationOverall(state))
     promises.push(getJerseys(state))
     promises.push(getGroupTelemetry(state))
 
