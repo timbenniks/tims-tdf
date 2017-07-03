@@ -1,17 +1,18 @@
 <template>
-<h1>{{title}}</h1>
+<button @click="increment">{{count}}</button>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'App',
-  data() {
-    return {
-      title: 'test header 2'
-    }
-  },
-  props: {},
-  components: {}
+  computed: mapGetters([
+    'count'
+  ]),
+  methods: mapActions([
+    'increment'
+  ])
 }
 </script>
 

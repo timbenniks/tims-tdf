@@ -1,17 +1,30 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import actions from './actions'
-import mutations from './mutations'
-import getters from './getters'
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    feed: []
+    count: 0
   },
-  getters,
-  mutations,
-  actions
+  getters: {
+    count(state) {
+      return state.count
+    }
+  },
+  mutations: {
+    increment(state) {
+      state.count++
+    }
+  },
+  actions: {
+    increment({ commit }) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          commit('increment')
+          resolve()
+        }, 1000)
+      })
+    }
+  }
 })
