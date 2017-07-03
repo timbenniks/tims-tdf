@@ -14,11 +14,15 @@ module.exports = () => new Promise((resolve, reject) => {
   }))
 
   const url = getUrl('stages')
+  const meta = {
+    originalUrl: url,
+    type: 'stages'
+  }
 
   callApi(url)
     .then(response => resolve({
-      originalUrl: url,
-      stages: cleanStages(response)
+      meta,
+      data: cleanStages(response)
     }))
-    .catch(error => reject({ error, originalUrl: url }))
+    .catch(error => reject({ error, meta }))
 })

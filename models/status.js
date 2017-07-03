@@ -3,14 +3,20 @@ const callApi = require('../helpers/callApi')
 
 module.exports = () => new Promise((resolve, reject) => {
   const url = getUrl('status')
+  const meta = {
+    originalUrl: url,
+    type: 'status'
+  }
 
   callApi(url)
     .then(response => {
       resolve({
-        originalUrl: url,
-        status: response.State,
-        message: response.Message
+        meta,
+        data: {
+          status: response.State,
+          message: response.Message
+        }
       })
     })
-    .catch(error => reject({ error, originalUrl: url }))
+    .catch(error => reject({ error, meta }))
 })

@@ -12,12 +12,16 @@ module.exports = state => new Promise((resolve, reject) => {
     time: weather.WeatherDate
   })
 
-  const url = getUrl('weather', state.stage).replace('__distancefromstart__', state.distanceFromStart)
+  const url = getUrl('weather', state.data.stage).replace('__distancefromstart__', state.data.distanceFromStart)
+  const meta = {
+    originalUrl: url,
+    type: 'weather'
+  }
 
   callApi(url)
     .then(response => resolve({
-      originalUrl: url,
-      weather: cleanWeather(response)
+      meta,
+      data: cleanWeather(response)
     }))
-    .catch(error => reject({ error, originalUrl: url }))
+    .catch(error => reject({ error, meta }))
 })
