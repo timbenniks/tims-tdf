@@ -1,5 +1,10 @@
 <template>
-<button @click="increment">{{count}}</button>
+  <div class="bla">
+    <article v-for="item in feed.data.items" :key="item.id">
+      <h1>{{item.title}}</h1>
+      <p>{{item.description}}</p>
+    </article>
+  </div>
 </template>
 
 <script>
@@ -8,11 +13,14 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'App',
   computed: mapGetters([
-    'count'
+    'feed'
   ]),
   methods: mapActions([
-    'increment'
-  ])
+    'updateFeed'
+  ]),
+  mounted(){
+    this.updateFeed()
+  }
 }
 </script>
 
