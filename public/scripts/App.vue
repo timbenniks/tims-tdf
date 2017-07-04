@@ -1,25 +1,22 @@
 <template>
-  <div class="bla">
-    <article v-for="item in feed.data.items" :key="item.id">
-      <h1>{{item.title}}</h1>
-      <p>{{item.description}}</p>
-    </article>
-  </div>
+  <feed></feed>
 </template>
 
 <script>
+import Feed from './components/feed.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'App',
-  computed: mapGetters([
-    'feed'
-  ]),
-  methods: mapActions([
-    'updateFeed'
-  ]),
+  components: { Feed },
+  methods: mapActions(['updateFeed','updateCurrentState']),
   mounted(){
     this.updateFeed()
+    this.updateCurrentState()
+    setInterval(()=>{
+      this.updateFeed()
+      this.updateCurrentState()
+    }, 10000)
   }
 }
 </script>
