@@ -14,7 +14,7 @@ module.exports = () => new Promise((resolve, reject) => {
     birthDate: rider.DateOfBirth,
     photo: rider.PhotoUri,
     generalClassificationShort: rider.GeneralClassification,
-    sprntClassificationShort: rider.SprintClassification,
+    sprintClassificationShort: rider.SprintClassification,
     withdrawn: rider.IsWithdrawn,
     rank: [{
       yellow: rider.GeneralClassificationRank,
@@ -25,7 +25,16 @@ module.exports = () => new Promise((resolve, reject) => {
     }]
   }))
 
-  callApi(getUrl('riders'))
-    .then(response => resolve(cleanRiders(response)))
-    .catch(reject)
+  const url = getUrl('riders')
+  const meta = {
+    originalUrl: url,
+    type: 'riders'
+  }
+
+  callApi(url)
+    .then(response => resolve({
+      meta,
+      data: cleanRiders(response)
+    }))
+    .catch(error => reject({ error, meta }))
 })

@@ -18,11 +18,16 @@ browserify.settings({
     [vueify]
   ],
   production: {
-    cache: true,
-    precompile: true,
-    minify: true,
-    gzip: true,
-    debug: false
+    // cache: true,
+    // precompile: true,
+    // minify: true,
+    // gzip: true,
+    // debug: false,
+    cache: 'dynamic',
+    precompile: false,
+    minify: false,
+    gzip: false,
+    debug: false,
   },
   development: {
     cache: 'dynamic',
@@ -49,6 +54,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use((req, res, next) => {
   res.header('X-powered-by', config.title)
   res.header('Access-Control-Allow-Origin', '*')
+  req.env = app.settings.env
   next()
 })
 

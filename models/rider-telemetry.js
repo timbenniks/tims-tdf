@@ -22,21 +22,30 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
     virtualLeader: rider.TTVirtualLeader || false,
     gapToVirtualLeader: rider.TTGapToVirtualLeaderT || false,
     generalWindDirection: rider.RelativeWindDirection || false,
-    riderInfo: peloton.find(r => r.id === rider.Bib)
+    riderInfo: peloton.data.find(r => r.id === rider.Bib)
   }))
 
-  callApi(getUrl('riderTelemetry', state.stage))
+  const url = getUrl('riderTelemetry', state.data.stage)
+  const meta = {
+    originalUrl: url,
+    type: 'rider-telemetry'
+  }
+
+  callApi(url)
     .then(response => {
       resolve({
-        epoch: response.TimeStampEpoch,
-        periodStart: response.TimeStampStart,
-        periodEnd: response.TimeStampEnd,
-        speed: response.RaceSpeed,
-        maxSpeed: response.RaceMaxSpeed,
-        distToFinish: response.RaceDistanceToFinish,
-        distFromStart: response.RaceDistanceFromStart,
-        riders: cleanRiders(response.Riders)
+        meta,
+        data: {
+          epoch: response.TimeStampEpoch,
+          periodStart: response.TimeStampStart,
+          periodEnd: response.TimeStampEnd,
+          speed: response.RaceSpeed,
+          maxSpeed: response.RaceMaxSpeed,
+          distToFinish: response.RaceDistanceToFinish,
+          distFromStart: response.RaceDistanceFromStart,
+          riders: cleanRiders(response.Riders)
+        }
       })
     })
-    .catch(reject)
+    .catch(error => reject({ error, meta }))
 })

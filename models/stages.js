@@ -13,7 +13,16 @@ module.exports = () => new Promise((resolve, reject) => {
     distanceFromStart: stage.TotalDistanceFromRaceStart
   }))
 
-  callApi(getUrl('stages'))
-    .then(response => resolve(cleanStages(response)))
-    .catch(reject)
+  const url = getUrl('stages')
+  const meta = {
+    originalUrl: url,
+    type: 'stages'
+  }
+
+  callApi(url)
+    .then(response => resolve({
+      meta,
+      data: cleanStages(response)
+    }))
+    .catch(error => reject({ error, meta }))
 })
