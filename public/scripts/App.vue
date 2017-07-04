@@ -1,21 +1,25 @@
 <template>
-  <feed></feed>
+  <div class="wrapper">
+    <state></state>
+    <weather></weather>
+    <feed></feed>
+  </div>
 </template>
 
 <script>
+import Weather from './components/weather.vue'
 import Feed from './components/feed.vue'
-import { mapGetters, mapActions } from 'vuex'
+import State from './components/state.vue'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
-  components: { Feed },
-  methods: mapActions(['updateFeed','updateCurrentState']),
+  components: { Feed, Weather, State },
+  methods: mapActions(['updateCombined']),
   mounted(){
-    this.updateFeed()
-    this.updateCurrentState()
+    this.updateCombined('state,weather,feed')
     setInterval(()=>{
-      this.updateFeed()
-      this.updateCurrentState()
+      this.updateCombined('state,weather,feed')
     }, 10000)
   }
 }

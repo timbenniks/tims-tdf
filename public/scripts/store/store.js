@@ -7,35 +7,38 @@ Vue.use(Resource)
 
 export default new Vuex.Store({
   state: {
-    feed: { data: {}, meta: {} },
-    currentState: {}
+    state: {},
+    feed: [],
+    weather: {}
   },
   getters: {
+    state(state) {
+      return state.state
+    },
+    weather(state) {
+      return state.weather
+    },
     feed(state) {
       return state.feed
-    },
-    currentState(state) {
-      return state.currentState
     }
   },
   mutations: {
-    updateFeed(state, feed) { state.feed = feed },
-    updateCurrentState(state, currentState) { state.currentState = currentState }
+    updateCombined(state, data) {
+      for (const api in data) {
+        if ({}.hasOwnProperty.call(data, api)) {
+          state[api] = data[api]
+        }
+      }
+    }
   },
   actions: {
-    updateFeed({ commit }) {
-      Vue.http.get('/api/feed')
-      .then(response => {
-        if (!response.body.error) {
-          commit('updateFeed', response.body)
-        }
-      }, response => console.error(response))
-    },
-    updateCurrentState({ commit }) {
-      Vue.http.get('/api/state')
-      .then(response => {
-        commit('updateCurrentState', response.body)
-      }, response => console.error(response))
+    updateCombined({ commit }, apis) {
+      Vue.http.get(`/api/combined?apis=${apis}`)
+        .then(response => {
+          if (!response.body.error) {
+            commit('updateCombined', response.body)
+          }
+        }, response => console.error(response))
     }
   }
 })
