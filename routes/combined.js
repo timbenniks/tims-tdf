@@ -44,7 +44,7 @@ router.get('/', (req, res) => {
   if (errorQs.length > 0) {
     res.json({ message: `[${errorQs}] should exist in [${whitelist}]` })
   }
-// status,state,feed,weather,stages,starters,trial,riders,route,withdrawals,classification-overall,jerseys,group-telemetry,rider-telemetry
+
   getState().then(state => {
     getRiders().then(riders => {
       correctQs.forEach(q => {
