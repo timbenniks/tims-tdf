@@ -14,6 +14,7 @@ const getClassificationOverall = require('../models/classification-overall')
 const getJerseys = require('../models/jerseys')
 const getGroupTelemetry = require('../models/group-telemetry')
 const getRiderTelemetry = require('../models/rider-telemetry')
+const getGroups = require('../models/groups')
 
 const router = express.Router()
 
@@ -156,8 +157,6 @@ router.get('/group-telemetry', (req, res) => {
     .then((state) => {
       getRiders()
         .then((riders) => {
-          console.log(state, riders)
-
           getGroupTelemetry(state, riders)
             .then(response => res.json(response))
             .catch(error => res.json({ error }))
@@ -178,6 +177,14 @@ router.get('/rider-telemetry', (req, res) => {
         })
         .catch(error => res.json({ error }))
     })
+    .catch(error => res.json({ error }))
+})
+
+router.get('/groups', (req, res) => {
+  Promise.all([getState(), getRiders()])
+    .then(data => Promise.all([getGroupTelemetry(data[0], data[1]), getRiderTelemetry(data[0], data[1])]))
+    .then(results => getGroups(results[0], results[1]))
+    .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
