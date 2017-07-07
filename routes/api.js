@@ -45,6 +45,7 @@ router.get('/', (req, res) => {
       `${baseurl}/api/jerseys`,
       `${baseurl}/api/group-telemetry`,
       `${baseurl}/api/rider-telemetry`,
+      `${baseurl}/api/groups`,
       `${baseurl}/api/combined`,
     ]
   })
@@ -90,16 +91,9 @@ router.get('/starters', (req, res) => {
 })
 
 router.get('/trial', (req, res) => {
-  getState()
-    .then((state) => {
-      getRiders()
-        .then((riders) => {
-          getTrial(state, riders)
-            .then(response => res.json(response))
-            .catch(error => res.json({ error }))
-        })
-        .catch(error => res.json({ error }))
-    })
+  Promise.all([getState(), getRiders()])
+    .then(data => getTrial(data[0], data[1]))
+    .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
@@ -125,58 +119,30 @@ router.get('/withdrawals', (req, res) => {
 })
 
 router.get('/classification-overall', (req, res) => {
-  getState()
-    .then((state) => {
-      getRiders()
-        .then((riders) => {
-          getClassificationOverall(state, riders)
-            .then(response => res.json(response))
-            .catch(error => res.json({ error }))
-        })
-        .catch(error => res.json({ error }))
-    })
+  Promise.all([getState(), getRiders()])
+    .then(data => getClassificationOverall(data[0], data[1]))
+    .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/jerseys', (req, res) => {
-  getState()
-    .then((state) => {
-      getRiders()
-        .then((riders) => {
-          getJerseys(state, riders)
-            .then(response => res.json(response))
-            .catch(error => res.json({ error }))
-        })
-        .catch(error => res.json({ error }))
-    })
+  Promise.all([getState(), getRiders()])
+    .then(data => getJerseys(data[0], data[1]))
+    .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/group-telemetry', (req, res) => {
-  getState()
-    .then((state) => {
-      getRiders()
-        .then((riders) => {
-          getGroupTelemetry(state, riders)
-            .then(response => res.json(response))
-            .catch(error => res.json({ error }))
-        })
-        .catch(error => res.json({ error }))
-    })
+  Promise.all([getState(), getRiders()])
+    .then(data => getGroupTelemetry(data[0], data[1]))
+    .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
 router.get('/rider-telemetry', (req, res) => {
-  getState()
-    .then((state) => {
-      getRiders()
-        .then((riders) => {
-          getRiderTelemetry(state, riders)
-            .then(response => res.json(response))
-            .catch(error => res.json({ error }))
-        })
-        .catch(error => res.json({ error }))
-    })
+  Promise.all([getState(), getRiders()])
+    .then(data => getRiderTelemetry(data[0], data[1]))
+    .then(response => res.json(response))
     .catch(error => res.json({ error }))
 })
 
