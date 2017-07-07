@@ -3,6 +3,7 @@ const callApi = require('../helpers/callApi')
 
 module.exports = (state, peloton) => new Promise((resolve, reject) => {
   const cleanRiders = riders => riders.map(rider => ({
+    id: rider.Bib,
     lat: rider.Latitude,
     lon: rider.Longitude,
     gradient: rider.Gradient,
