@@ -5,8 +5,12 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
   const getRiders = riders => riders.map(rider => peloton.data.find(r => r.id === rider.Bib))
 
   const cleanGroups = groups => groups.map(group => ({
-    id: group.Latitude,
     key: group.GroupNameKey,
+    name: group.GroupName,
+    lat: group.GroupLatitude,
+    lon: group.GroupLongitude,
+    size: group.GroupSize,
+    position: group.GroupPosition,
     speed: group.GroupSpeed,
     avgSpeed: group.GroupAverageSpeed,
     maxSpeed: group.GroupMaxSpeed,
@@ -16,6 +20,13 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
     hasPolkaJersey: group.HasMountainJersey,
     hasRedNumber: group.HasCombativityJersey,
     gapFromNextGroup: group.GapFromNextGroupT,
+    gapToNextGroup: group.GapToNextGroupT,
+    gapToPrevGroup: group.GapToPreviousGroupT,
+    gapDiffFromNextGroup: group.GapDiffFromNextGroupT,
+    gapToLeadingGroup: group.GapToLeadingGroupT,
+    distToFinish: group.GroupDistanceToFinish,
+    distFromStart: group.GroupDistanceFromStart,
+
     riders: getRiders(group.Riders)
   }))
 
@@ -27,6 +38,10 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
 
   callApi(url)
     .then(response => {
+      if (response === null || !response.Groups) {
+        resolve({ meta, data: 'NO_RESPONSE' })
+      }
+
       resolve({
         meta,
         data: {

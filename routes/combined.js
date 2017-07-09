@@ -18,7 +18,7 @@ const router = express.Router()
 
 router.get('/', (req, res) => {
   const qs = req.query.apis && req.query.apis.split(',')
-  const whitelist = ['status', 'state', 'feed', 'weather', 'stages', 'starters', 'trial', 'riders', 'route', 'withdrawals', 'classification-overall', 'jerseys', 'group-telemetry', 'rider-telemetry']
+  const whitelist = ['status', 'state', 'feed', 'weather', 'stages', 'starters', 'trial', 'riders', 'route', 'withdrawals', 'classification-overall', 'jerseys', 'group-telemetry', 'rider-telemetry', 'groups']
   const errorQs = []
   const correctQs = []
   const promises = []
@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
   if (!qs) {
     res.json({
       message: 'No query parameters given. Use: ?apis= with a comma seperated list.',
-      apis: 'status, state, feed, weather, stages, starters, trial, riders, route, withdrawals, classification-overall, jerseys, group-telemetry, rider-telemetry',
+      apis: 'status, state, feed, weather, stages, starters, trial, riders, route, withdrawals, classification-overall, jerseys, group-telemetry, rider-telemetry, groups',
       example: '/api/combined?apis=feed,route'
     })
   }
@@ -45,23 +45,23 @@ router.get('/', (req, res) => {
     res.json({ message: `[${errorQs}] should exist in [${whitelist}]` })
   }
 
-  getState().then(state => {
-    getRiders().then(riders => {
+  Promise.all([getState(), getRiders()])
+    .then(data => {
       correctQs.forEach(q => {
         if (q === 'status') { promises.push(getStatus()) }
         if (q === 'state') { promises.push(getState()) }
-        if (q === 'feed') { promises.push(getFeed(state)) }
-        if (q === 'weather') { promises.push(getWeather(state)) }
+        if (q === 'feed') { promises.push(getFeed(data[0])) }
+        if (q === 'weather') { promises.push(getWeather(data[0])) }
         if (q === 'stages') { promises.push(getStages()) }
-        if (q === 'starters') { promises.push(getStarters(state)) }
-        if (q === 'riders') { promises.push(getRiders(state)) }
-        if (q === 'route') { promises.push(getRoute(state)) }
-        if (q === 'withdrawals') { promises.push(getWithdrawals(state)) }
-        if (q === 'jerseys') { promises.push(getJerseys(state, riders)) }
-        if (q === 'group-telemetry') { promises.push(getGroupTelemetry(state, riders)) }
-        if (q === 'rider-telemetry') { promises.push(getRiderTelemetry(state, riders)) }
-        if (q === 'classification-overall') { promises.push(getClassificationOverall(state, riders)) }
-        if (q === 'trial') { promises.push(getTrial(state, riders)) }
+        if (q === 'starters') { promises.push(getStarters(data[0])) }
+        if (q === 'riders') { promises.push(getRiders(data[0])) }
+        if (q === 'route') { promises.push(getRoute(data[0])) }
+        if (q === 'withdrawals') { promises.push(getWithdrawals(data[0])) }
+        if (q === 'jerseys') { promises.push(getJerseys(data[0], data[1])) }
+        if (q === 'group-telemetry') { promises.push(getGroupTelemetry(data[0], data[1])) }
+        if (q === 'rider-telemetry') { promises.push(getRiderTelemetry(data[0], data[1])) }
+        if (q === 'classification-overall') { promises.push(getClassificationOverall(data[0], data[1])) }
+        if (q === 'trial') { promises.push(getTrial(data[0], data[1])) }
       })
 
       Promise.all(promises)
@@ -72,12 +72,10 @@ router.get('/', (req, res) => {
 
           res.json(response)
         }, reason => {
-          // response[reason.meta.type] = reason.error
           res.json(reason)
         })
         .catch(error => res.json({ error }))
     })
-  })
 })
 
 module.exports = router
