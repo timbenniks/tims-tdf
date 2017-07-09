@@ -19,9 +19,15 @@ module.exports = state => new Promise((resolve, reject) => {
   }
 
   callApi(url)
-    .then(response => resolve({
-      meta,
-      data: cleanWeather(response)
-    }))
+    .then(response => {
+      if (response === null) {
+        resolve({ meta, data: 'NO_RESPONSE' })
+      }
+
+      resolve({
+        meta,
+        data: cleanWeather(response)
+      })
+    })
     .catch(error => reject({ error, meta }))
 })

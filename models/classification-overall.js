@@ -18,13 +18,19 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
   }
 
   callApi(url)
-    .then(response => resolve({
-      meta,
-      data: {
-        yellow: cleanClassification(response.General),
-        white: cleanClassification(response.Sprint),
-        youth: cleanClassification(response.Youth)
+    .then(response => {
+      if (response === null) {
+        resolve({ meta, data: 'NO_RESPONSE' })
       }
-    }))
-    .catch(error => reject({ error, meta }))
+
+      resolve({
+        meta,
+        data: {
+          yellow: cleanClassification(response.General),
+          white: cleanClassification(response.Sprint),
+          youth: cleanClassification(response.Youth)
+        }
+      })
+    })
+  .catch(error => reject({ error, meta }))
 })

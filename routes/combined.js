@@ -18,7 +18,7 @@ const router = express.Router()
 
 router.get('/', (req, res) => {
   const qs = req.query.apis && req.query.apis.split(',')
-  const whitelist = ['status', 'state', 'feed', 'weather', 'stages', 'starters', 'trial', 'riders', 'route', 'withdrawals', 'classification-overall', 'jerseys', 'group-telemetry', 'rider-telemetry']
+  const whitelist = ['status', 'state', 'feed', 'weather', 'stages', 'starters', 'trial', 'riders', 'route', 'withdrawals', 'classification-overall', 'jerseys', 'group-telemetry', 'rider-telemetry', 'groups']
   const errorQs = []
   const correctQs = []
   const promises = []
@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
   if (!qs) {
     res.json({
       message: 'No query parameters given. Use: ?apis= with a comma seperated list.',
-      apis: 'status, state, feed, weather, stages, starters, trial, riders, route, withdrawals, classification-overall, jerseys, group-telemetry, rider-telemetry',
+      apis: 'status, state, feed, weather, stages, starters, trial, riders, route, withdrawals, classification-overall, jerseys, group-telemetry, rider-telemetry, groups',
       example: '/api/combined?apis=feed,route'
     })
   }
