@@ -1,6 +1,6 @@
 <template>
   <div class="feed">
-    <template v-if="feed && feed">
+    <template v-if="feed">
       <article v-for="item in feed.items" :key="item.id">
         <h1>{{item.title}}</h1>
         <p>{{item.description}}</p>

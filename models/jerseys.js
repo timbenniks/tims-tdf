@@ -10,14 +10,20 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
   }
 
   callApi(url)
-    .then(response => resolve({
-      meta,
-      data: {
-        yellow: peloton.data.find(r => r.id === findJersey('General', response)[0].RiderBibNumber),
-        green: peloton.data.find(r => r.id === findJersey('Sprint', response)[0].RiderBibNumber),
-        white: peloton.data.find(r => r.id === findJersey('Youth', response)[0].RiderBibNumber),
-        polka: peloton.data.find(r => r.id === findJersey('Mountain', response)[0].RiderBibNumber)
+    .then(response => {
+      if (response === null) {
+        resolve({ meta, data: 'NO_RESPONSE' })
       }
-    }))
+
+      resolve({
+        meta,
+        data: {
+          yellow: peloton.data.find(r => r.id === findJersey('General', response)[0].RiderBibNumber),
+          green: peloton.data.find(r => r.id === findJersey('Sprint', response)[0].RiderBibNumber),
+          white: peloton.data.find(r => r.id === findJersey('Youth', response)[0].RiderBibNumber),
+          polka: peloton.data.find(r => r.id === findJersey('Mountain', response)[0].RiderBibNumber)
+        }
+      })
+    })
     .catch(error => reject({ error, meta }))
 })

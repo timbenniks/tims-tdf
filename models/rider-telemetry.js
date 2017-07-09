@@ -34,6 +34,10 @@ module.exports = (state, peloton) => new Promise((resolve, reject) => {
 
   callApi(url)
     .then(response => {
+      if (response === null) {
+        resolve({ meta, data: 'NO_RESPONSE' })
+      }
+
       resolve({
         meta,
         data: {

@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: {
     state: {},
     feed: [],
-    weather: {}
+    weather: {},
+    groups: {}
   },
   getters: {
     state(state) {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     },
     feed(state) {
       return state.feed
+    },
+    groups(state) {
+      return state.groups
     }
   },
   mutations: {
@@ -29,6 +33,9 @@ export default new Vuex.Store({
           state[api] = data[api]
         }
       }
+    },
+    updateGroups(state, data) {
+      state.groups = data
     }
   },
   actions: {
@@ -37,6 +44,14 @@ export default new Vuex.Store({
         .then(response => {
           if (!response.body.error) {
             commit('updateCombined', response.body)
+          }
+        }, response => console.error(response))
+    },
+    updateGroups({ commit }) {
+      Vue.http.get('/api/groups')
+        .then(response => {
+          if (!response.body.error) {
+            commit('updateGroups', response.body)
           }
         }, response => console.error(response))
     }

@@ -1,7 +1,8 @@
 <template>
   <div class="state">
     <template v-if="state">
-      {{state}}
+      <p>Stage {{state.stageNumber}} ({{state.stageType}}) {{state.distance}}km</p>
+      <h1>{{state.start}}&mdash;{{state.finish}}</h1>
     </template>
   </div>
 </template>
