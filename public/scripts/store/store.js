@@ -8,7 +8,10 @@ Vue.use(Resource)
 export default new Vuex.Store({
   state: {
     state: {},
-    feed: [],
+    feed: {
+      count: 0,
+      items: []
+    },
     weather: {},
     groups: {}
   },
@@ -20,7 +23,10 @@ export default new Vuex.Store({
       return state.weather
     },
     feed(state) {
-      return state.feed
+      return {
+        count: state.feed.count,
+        items: state.feed.items.slice(0, 5)
+      }
     },
     groups(state) {
       return state.groups

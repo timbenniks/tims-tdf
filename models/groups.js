@@ -25,10 +25,12 @@ module.exports = (groups, riders) => new Promise((resolve) => {
   }))
 
   const meta = {
-    speed: riders.data.speed,
-    maxSpeed: riders.data.maxSpeed,
-    distToFinish: riders.data.distToFinish,
-    distFromStart: riders.data.distFromStart
+    speed: Number(riders.data.speed).toFixed(0),
+    maxSpeed: Number(riders.data.maxSpeed).toFixed(0),
+    distToFinish: Number(riders.data.distToFinish).toFixed(0),
+    distFromStart: Number(riders.data.distFromStart).toFixed(0),
+    totalDistance: riders.data.distToFinish + riders.data.distFromStart,
+    percentage: `${Number((riders.data.distFromStart / (riders.data.distToFinish + riders.data.distFromStart)) * 100).toFixed(0)}%`
   }
 
   let result

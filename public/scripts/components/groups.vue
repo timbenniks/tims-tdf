@@ -1,7 +1,12 @@
 <template>
   <div class="groups">
-    <template v-if="groups.length">
-      <p v-if="groups.meta">Speed: {{groups.meta.speed}}km/h.<br/>To finish: {{groups.meta.distToFinish}}km. </p>
+    <template v-if="groups">
+      <div class="meta" v-if="groups.meta">
+        <p>Current Speed: {{groups.meta.speed}}km/h &mdash; {{groups.meta.distToFinish}}km to go</p>
+        <div class="meta-total-distance">
+          <div class="meta-to-go" :style="{ width: groups.meta.percentage }"></div>
+        </div>
+      </div>
       <ul>
         <li v-for="group in groups.groups" :key="group.key">
           <p>{{group.position}}: {{group.name}}({{group.size}})<br/>
@@ -19,9 +24,6 @@
           </p>
         </li>
       </ul>
-    </template>
-    <template v-else>
-      <p>No group data available</p>
     </template>
   </div>
 </template>

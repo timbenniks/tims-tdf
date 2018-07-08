@@ -1,11 +1,13 @@
 <template>
   <div class="wrapper">
-    <state></state>
-    <weather></weather>
-    <div class="wrapper" style="overflow: hidden">
-      <groups style="width:40%; float:left"></groups>
-      <feed style="width:40%; float:left"></feed>
-    </div>
+    <header>
+      <state></state>
+    </header>
+    <main>
+      <weather></weather>
+      <groups></groups>
+      <feed></feed>
+    </main>
   </div>
 </template>
 
@@ -32,8 +34,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  h1 {
-    color: #000;
-  }
-</style>

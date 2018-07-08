@@ -1,11 +1,7 @@
 <template>
   <div class="weather">
     <template v-if="weather">
-      <ul>
-        <li>{{weather.temp}}°C</li>
-        <li>{{weather.windDirection}} wind at {{weather.windSpeed}}km/h</li>
-        <li>{{weather.humidity}}% humidity</li>
-      </ul>
+      <p>{{weather.temp}}°C with {{weather.windSpeed}}km/h winds at {{weather.humidity}}% humidity</p>
     </template>
   </div>
 </template>
