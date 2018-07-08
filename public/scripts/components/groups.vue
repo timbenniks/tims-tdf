@@ -1,6 +1,6 @@
 <template>
   <div class="groups">
-    <template v-if="groups">
+    <template v-if="groups.length">
       <p v-if="groups.meta">Speed: {{groups.meta.speed}}km/h.<br/>To finish: {{groups.meta.distToFinish}}km. </p>
       <ul>
         <li v-for="group in groups.groups" :key="group.key">
@@ -19,6 +19,9 @@
           </p>
         </li>
       </ul>
+    </template>
+    <template v-else>
+      <p>No group data available</p>
     </template>
   </div>
 </template>
